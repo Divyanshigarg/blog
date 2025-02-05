@@ -3,7 +3,8 @@ const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
 
-exports.registerUser = async(req,res) => {
+//function to register the user
+exports.registerUser = async(req,res, next) => {
     try{
         const {name, email, password} = req.body;
         if(!name){
@@ -28,12 +29,12 @@ exports.registerUser = async(req,res) => {
         return response(res, 200, true, 'User created successfully', {createUser})
 
     }catch(error){
-       console.log(error)
-       return response(res, 500, false, 'Internal Server Error', {})
+    next(error)
     }
 }
 
-exports.login = async(req,res) => {
+//function to login a user
+exports.login = async(req,res,next) => {
     try{
         const {email, password} = req.body;
         if(!email){
@@ -54,42 +55,15 @@ exports.login = async(req,res) => {
          // Generate JWT token
          const token = jwt.sign(
             { userId: existingUser._id, email: existingUser.email },  
-            process.env.JWT_SECRET,  // Secret key (store in .env)
-            { expiresIn: '1y' }  // Expiry time
+            process.env.JWT_SECRET,    // Secret key (store in .env)
+            { expiresIn: '1y' }    // Expiry time
         );
 
         return response(res, 200, true, 'Login successful',{token})
     
     }catch(error){
-       console.log(error)
-       return response(res, 500, false, 'Internal Server Error', {})
+       next(error)
     }
 }
 
-
-exports.getUser = async(req,res) => {
-    try{
-     const { id } = req.params;
-     if(!id)
-        return response(res, 400, false, 'User Id is required', {})
-    const getUserDetails = await User.findOne({_id: id, isDeleted: false})
-    return response(res, 200, true, 'User details fetched successfully', {})
-
-    }catch(errro){
-       console.log(error)
-       return response(res, 500, false, 'Internal Server Error', {})
-    }
-}
-
-exports.updateUser = async(req,res) => {
-    try{
-        const {email} = req.params;
-        const { password } = req.body
-        const updateUser = await User.findOneAndUpdate(email,{password: password}, {new:true})
-     return response(res, 200, true, 'User details updated successfully', {updateUser})
-    }catch(errro){
-       console.log(error)
-       return response(res, 500, false, 'Internal Server Error', {})
-    }
-}
 

@@ -1,11 +1,13 @@
 const Blog = require('../models/blogModel')
 const {response} = require('../helper/response')
 
-exports.createBlog = async(req,res) => {
+//function to create blog
+exports.createBlog = async(req,res, next) => {
     try{
         const user = req.user.userId;
         
-        const { title, content,  published , category} = req.body;
+        const { title, content , category} = req.body;
+        //check whether all the fields are provided or not
         if(!title)
         return response(res, 400, false, 'Title is required',{})
         if(!content)
@@ -13,6 +15,7 @@ exports.createBlog = async(req,res) => {
         if(!category || !['Technology', 'Health', 'Lifestyle', 'Education', 'Travel'].includes(category))
         return response(res, 400, false, 'Category is required and should be one of these Technology, Health, Lifestyle, Education, Travel',{})
 
+        //create blog
         const createBlog = await Blog.create({
             title,
             content,
@@ -24,12 +27,12 @@ exports.createBlog = async(req,res) => {
         })
 
     }catch(error){
-        console.log(error)
-        return  response(res, 500, false, 'Internal Server Error', {})
+       next(error)
     }
 }
 
-exports.updateBlog = async (req, res) => {
+//function to update blog
+exports.updateBlog = async (req, res, next) => {
     try {
         const userId = req.user.userId; 
         const { blogId } = req.params;
@@ -62,12 +65,12 @@ exports.updateBlog = async (req, res) => {
         return response(res, 200, true, "Blog updated successfully", { updatedBlog: existingBlog });
 
     } catch (error) {
-        console.error("Error updating blog:", error);
-        return response(res, 500, false, "Internal Server Error", {});
+        next(error)
     }
 };
 
-exports.deleteBlog = async (req, res) => {
+//function to delete blog
+exports.deleteBlog = async (req, res, next) => {
     try {
         const userId = req.user.userId; 
         const { blogId } = req.params;
@@ -94,13 +97,12 @@ exports.deleteBlog = async (req, res) => {
         return response(res, 200, true, "Blog deleted successfully", {deletedBlog});
 
     } catch (error) {
-        console.error("Error deleting blog:", error);
-        return response(res, 500, false, "Internal Server Error", {});
+        next(error)
     }
 };
 
-
-exports.getBlog = async (req, res) => {
+//function to get the single blog details
+exports.getBlog = async (req, res, next) => {
     try {
         const { blogId } = req.params;
 
@@ -118,13 +120,12 @@ exports.getBlog = async (req, res) => {
         return response(res, 200, true, "Blog fetched successfully", { blog });
 
     } catch (error) {
-        console.error("Error fetching blog:", error);
-        return response(res, 500, false, "Internal Server Error", {});
+        next(error)
     }
 };
 
-
-exports.getAllBlogs = async (req, res) => {
+//function to get all the blogs
+exports.getAllBlogs = async (req, res, next) => {
     try {
         const blogs = await Blog.find({isDeleted:false});
 
@@ -136,7 +137,6 @@ exports.getAllBlogs = async (req, res) => {
         return response(res, 200, true, "Blogs fetched successfully", { blogs });
 
     } catch (error) {
-        console.error("Error fetching blogs:", error);
-        return response(res, 500, false, "Internal Server Error", {});
+       next(error)
     }
 };
