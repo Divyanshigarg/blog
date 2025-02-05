@@ -5,7 +5,7 @@ require('dotenv').config()
 function verifyJwt(req, res, next) {
     try{
         const authorization = req.headers.authorization;
-        if (!authorization) return response(res, 401, "false", { message: "Token is required" });
+        if (!authorization) return response(res, 401, false,  "Token is required" );
 
         const token = authorization.split(" ")[1];
         
