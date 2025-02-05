@@ -36,7 +36,7 @@ Create a .env file in the root directory and add the following:
 
 * MONGO_URI=your_mongodb_connection_string
 * JWT_SECRET=your_secret_key
-* saltRound = your_salt_round
+* port = your_port
 
 Run the Server
 
