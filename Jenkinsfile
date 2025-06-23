@@ -1,9 +1,9 @@
 pipeline {
     agent any
     stages {
-        stage('Main Branch Build') {
+        stage('Dev  Branch Build') {
             steps {
-                echo "Building from main branch"
+                echo "This is Dev Branch Pipeline"
             }
         }
     }
