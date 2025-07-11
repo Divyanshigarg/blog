@@ -9,7 +9,7 @@ exports.createBlog = async(req,res, next) => {
         const { title, content , category} = req.body;
         //check whether all the fields are provided or not
         if(!title)
-        return response(res, 400, false, 'Title is required and should be minimum 6 characters',{})
+        return response(res, 400, false, 'Title is required and should be minimum 6 characterss',{})
         if(!content)
         return response(res, 400, false, 'Content is required',{})
         if(!category || !['Technology', 'Health', 'Lifestyle', 'Education', 'Travel'].includes(category))
