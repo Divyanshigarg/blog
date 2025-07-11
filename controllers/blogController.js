@@ -5,7 +5,6 @@ const {response} = require('../helper/response')
 exports.createBlog = async(req,res, next) => {
     try{
         const user = req.user.userId;
-        
         const { title, content , category} = req.body;
         //check whether all the fields are provided or not
         if(!title)
